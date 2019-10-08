@@ -21,7 +21,7 @@ dag = DAG(
 
 k = KubernetesPodOperator(namespace='default',
                           image="gcr.io/propertyguru-datalake-v0/dsa/airflow:python37", #Image path was incorrect
-                          name="test_kube",
+                          name="test-kube",
                           in_cluster=True, #To trigger cluster kubeconfig.
                           image_pull_policy="Always",  #In my case, I need the image update to occur whenever there is an update
                           task_id="test",
