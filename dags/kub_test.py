@@ -18,7 +18,7 @@ dag = DAG(
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60))
 
-secret_env = secret.Secret(
+secret_env = Secret(
     deploy_type = 'env',
     deploy_target = 'GOOGLE_APPLICATION_CREDENTIALS',
     secret = 'airflow-testing-secret',
