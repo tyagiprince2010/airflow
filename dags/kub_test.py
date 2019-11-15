@@ -18,11 +18,20 @@ dag = DAG(
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60))
 
+secret_env = secret.Secret(
+    deploy_type = 'env',
+    deploy_target = 'GOOGLE_APPLICATION_CREDENTIALS',
+    secret = 'airflow-testing-secret',
+    key = 'key.json'
+)
 
 k = KubernetesPodOperator(namespace='default',
                           image="gcr.io/propertyguru-datalake-v0/dsa/airflow:python37", #Image path was incorrect
+                          cmd=["python"]
+                          arguments=["py_test.py"]
                           name="test-kube",
-                          in_cluster=True, #To trigger cluster kubeconfig.
+                          secrets=[secret_env],
+                          # in_cluster=True, #To trigger cluster kubeconfig.
                           image_pull_policy="Always",  #In my case, I need the image update to occur whenever there is an update
                           task_id="test",
                           is_delete_operator_pod=True,
