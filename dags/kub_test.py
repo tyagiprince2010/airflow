@@ -25,7 +25,7 @@ secret_env = Secret(
     key = 'key.json'
 )
 
-k = KubernetesPodOperator(namespace='default',
+k = KubernetesPodOperator(namespace='airflow-test',
                           image="gcr.io/propertyguru-datalake-v0/dsa/airflow:python37", #Image path was incorrect
                           cmd=["python"],
                           arguments=["py_test.py"],
