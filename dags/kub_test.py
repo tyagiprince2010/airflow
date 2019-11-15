@@ -27,8 +27,8 @@ secret_env = secret.Secret(
 
 k = KubernetesPodOperator(namespace='default',
                           image="gcr.io/propertyguru-datalake-v0/dsa/airflow:python37", #Image path was incorrect
-                          cmd=["python"]
-                          arguments=["py_test.py"]
+                          cmd=["python"],
+                          arguments=["py_test.py"],
                           name="test-kube",
                           secrets=[secret_env],
                           # in_cluster=True, #To trigger cluster kubeconfig.
