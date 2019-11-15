@@ -31,7 +31,7 @@ k = KubernetesPodOperator(namespace='default',
                           arguments=["py_test.py"],
                           name="test-kube",
                           secrets=[secret_env],
-                          # in_cluster=True, #To trigger cluster kubeconfig.
+                          in_cluster=True, #To trigger cluster kubeconfig.
                           image_pull_policy="Always",  #In my case, I need the image update to occur whenever there is an update
                           task_id="test",
                           is_delete_operator_pod=True,
