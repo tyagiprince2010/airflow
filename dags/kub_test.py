@@ -28,16 +28,6 @@ dag = DAG(
 
 
 
-slack_notify = SlackAPIPostOperator(
-    task_id='slack_notify',
-    token='xoxp-4897310620-122847929168-138969852049-0dff8acdbc77dc4f627a2374efa9b009',
-    channel='#dsa_job_alerts',
-    username='TEST',
-    text='JOB Failed {{ dag }} == {{ execution_date }}',
-    trigger_rule='one_failed',
-    dag=dag)
-
-
 py_test_k8_task1 = KubernetesPodOperator(namespace='airflow-test',
                           image="gcr.io/propertyguru-datalake-v0/dsa/airflow:python37", #Image path was incorrect
                           cmd=["/bin/bash", "-c"],
@@ -67,4 +57,4 @@ py_test_k8_task2 = KubernetesPodOperator(namespace='airflow-test',
                           dag=dag
                           )
 
-py_test_k8_task1 >> py_test_k8_task2 >> slack_notify
+py_test_k8_task1 >> py_test_k8_task2
