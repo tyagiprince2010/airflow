@@ -29,23 +29,13 @@ dag = DAG(
 
 
 slack_notify = SlackAPIPostOperator(
-    task_id='slack_failed',
-    channel="#dsa_job_alerts",
+    task_id='slack_notify',
     token='xoxp-4897310620-122847929168-138969852049-0dff8acdbc77dc4f627a2374efa9b009',
-    text="""
-        :red_circle: Task Failed.
-        *Task*: {task}
-        *Dag*: {dag}
-        *Execution Time*: {exec_date}
-        *Log Url*: {log_url}
-        """.format(
-        task=context.get('task_instance').task_id,
-        dag=context.get('task_instance').dag_id,
-        ti=context.get('task_instance'),
-        exec_date=context.get('execution_date'),
-        log_url=context.get('task_instance').log_url,
-    )
-)
+    channel='#dsa_job_alerts',
+    username='TEST',
+    text='JOB Failed {{ dag }} == {{ execution_date }}',
+    trigger_rule='one_failed',
+    dag=dag)
 
 
 py_test_k8_task1 = KubernetesPodOperator(namespace='airflow-test',
