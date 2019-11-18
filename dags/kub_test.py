@@ -18,9 +18,9 @@ dag = DAG(
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60))
 
-secret_env = Secret(
-    deploy_type = 'env',
-    deploy_target = 'GOOGLE_APPLICATION_CREDENTIALS',
+secret_file = Secret(
+    deploy_type = 'volume',
+    deploy_target = '/srv/airflow-secrets',
     secret = 'airflow-testing-secret',
     key = 'key.json'
 )
@@ -32,7 +32,8 @@ py_test_k8_task1 = KubernetesPodOperator(namespace='airflow-test',
                           cmd=["/bin/bash", "-c"],
                           arguments=["python", "./prog/py_test.py"],
                           name="test-kube",
-                          secrets=[secret_env],
+                          secrets=[secret_file],
+                          env_vars = {"GOOGLE_APPLICATION_CREDENTIALS":"/srv/airflow-secrets/key.json"},
                           in_cluster=True, #To trigger cluster kubeconfig.
                           image_pull_policy="Always",  #In my case, I need the image update to occur whenever there is an update
                           task_id="py_test_k8_task1",
@@ -47,7 +48,8 @@ py_test_k8_task2 = KubernetesPodOperator(namespace='airflow-test',
                           cmd=["/bin/bash", "-c"],
                           arguments=["python", "./prog/py_test.py"],
                           name="test-kube",
-                          secrets=[secret_env],
+                          secrets=[secret_file],
+                          env_vars = {"GOOGLE_APPLICATION_CREDENTIALS":"/srv/airflow-secrets/key.json"},
                           in_cluster=True, #To trigger cluster kubeconfig.
                           image_pull_policy="Always",  #In my case, I need the image update to occur whenever there is an update
                           task_id="py_test_k8_task2",
